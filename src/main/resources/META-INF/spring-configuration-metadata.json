@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "sourceType": "com.duxinglangzi.canal.starter.configuration.CanalAutoConfigurationProperties",
+      "name": "spring.canal.instances",
+      "type": "java.util.Map<java.lang.String,com.duxinglangzi.canal.starter.configuration.CanalAutoConfigurationProperties.EndpointInstance>",
+      "description": "canal config "
+    }
+  ]
+}

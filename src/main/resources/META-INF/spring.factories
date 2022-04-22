@@ -1,0 +1,9 @@
+
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.duxinglangzi.canal.starter.configuration.CanalAutoConfigurationProperties,\
+com.duxinglangzi.canal.starter.configuration.CanalConfigurationSelector
+
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+com.duxinglangzi.canal.starter.listener.ApplicationReadyListener

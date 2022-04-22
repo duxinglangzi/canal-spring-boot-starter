@@ -1,0 +1,60 @@
+### Java template
+# Compiled class file
+*.class
+
+# Log file
+/log/
+*.log
+
+# target files
+/target/
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+.flattened-pom.xml
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.project
+.classpath
+
+
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# svn files
+.svn/
+
+# maven files
+.mvn/
+mvnw
+mvnw.cmd
