@@ -15,6 +15,13 @@ import java.util.List;
 
 public class CanalConnectorFactory {
 
+    /**
+     * 创建 CanalConnector
+     * @param destination
+     * @param endpointInstance
+     * @return CanalConnector
+     * @author wuqiong 2022-04-23 20:36
+     */
     public static synchronized CanalConnector createConnector(
             String destination, CanalAutoConfigurationProperties.EndpointInstance endpointInstance) {
         Assert.isTrue(StringUtils.hasText(destination), "destination is null , please check ");

@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class CanalListenerTest {
 
     /**
-     * 目前 Listener 方法的参数必须为 CanalEntry.EventType eventType, CanalEntry.RowData rowData
+     * 目前 Listener 方法的参数必须为 CanalEntry.EventType , CanalEntry.RowData 
      * 程序在启动过程中会做检查
      */
 

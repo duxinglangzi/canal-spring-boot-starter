@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 抽象的canal transponder ,实现SmartLifecycle接口,声明周期由spring进行管理
  * @author wuqiong 2022/4/11
- * @description
  */
 public abstract class AbstractCanalTransponderContainer implements SmartLifecycle {
     protected boolean isRunning = false;
@@ -26,13 +26,14 @@ public abstract class AbstractCanalTransponderContainer implements SmartLifecycl
 
     @Override
     public void start() {
-        setRunning(true);
         new Thread(() -> {
+            // spring 启动后 才会进行canal数据拉取
             while (!ApplicationReadyListener.START_LISTENER_CONTAINER.get())
                 sleep(5L * SLEEP_TIME_MILLI_SECONDS);
             initConnect();
             while (isRunning() && !Thread.currentThread().isInterrupted()) doStart();
         }).start();
+        setRunning(true);
     }
 
     @Override

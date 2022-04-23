@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wuqiong 2022/4/16
- * @description
  */
 public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent>{
 
@@ -15,6 +14,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        // 确保程序启动之后，再放行所有的 canal transponder
         if (!START_LISTENER_CONTAINER.get()) START_LISTENER_CONTAINER.set(true);
     }
 }

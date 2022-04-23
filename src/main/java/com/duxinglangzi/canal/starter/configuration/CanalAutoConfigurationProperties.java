@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * Canal连接的配置类
  * @author wuqiong 2022/4/11
- * @description
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ConfigurationProperties(prefix = "spring.canal")

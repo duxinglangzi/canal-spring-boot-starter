@@ -20,6 +20,14 @@ public class TransponderContainerFactory {
     private static final String CONTAINER_ID_PREFIX = "com.duxinglangzi.canal.starter.container.MessageTransponderContainer#";
 
 
+    /**
+     * 将所有待注册的端点，注册到spring中
+     * @param beanFactory
+     * @param canalConfig
+     * @param registrars
+     * @return void
+     * @author wuqiong 2022-04-23 20:34
+     */
     public static void registerListenerContainer(
             ConfigurableListableBeanFactory beanFactory, CanalAutoConfigurationProperties canalConfig,
             Set<CanalListenerEndpointRegistrar> registrars) {
@@ -30,8 +38,8 @@ public class TransponderContainerFactory {
             if (beanFactory.containsBean(getContainerID(endpointInstance.getKey()))) continue; // 如果已经存在则不在创建
             List<CanalListenerEndpointRegistrar> registrarList = new ArrayList<>();
             for (CanalListenerEndpointRegistrar registrar : registrars) {
-                if (!registrar.isContainDestination(endpointInstance.getKey())) continue;
                 registrar.checkParameter(canalConfig.getInstances().keySet());
+                if (!registrar.isContainDestination(endpointInstance.getKey())) continue;
                 registrarList.add(registrar);
             }
             if (registrarList.isEmpty()) continue;

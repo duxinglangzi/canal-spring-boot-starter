@@ -12,8 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
+ * DML 数据拉取、解析
  * @author wuqiong 2022/4/11
- * @description
  */
 public class DmlMessageTransponderContainer extends AbstractCanalTransponderContainer {
 

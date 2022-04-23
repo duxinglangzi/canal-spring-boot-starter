@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 /**
  * @author wuqiong 2022/4/11
- * @description
  */
 public class CanalListenerAnnotationBeanPostProcessor implements
         BeanPostProcessor, SmartInitializingSingleton, BeanFactoryPostProcessor {
@@ -39,15 +38,17 @@ public class CanalListenerAnnotationBeanPostProcessor implements
     public Object postProcessAfterInitialization(final Object bean, final String beanName) throws BeansException {
         if (notAnnotatedClasses.contains(bean.getClass())) return bean;
         Class<?> targetClass = AopUtils.getTargetClass(bean);
+        // 只扫描类的方法，目前 CanalListener 只支持在方法上
         Map<Method, CanalListener> annotatedMethods = MethodIntrospector.selectMethods(targetClass,
                 (MethodIntrospector.MetadataLookup<CanalListener>) method -> findListenerAnnotations(method));
         if (annotatedMethods.isEmpty()) {
             this.notAnnotatedClasses.add(bean.getClass());
         } else {
+            // 先加入到待注册里面
             annotatedMethods.entrySet().stream()
                     .filter(e -> e != null)
                     .forEach(ele -> registrars.add(new CanalListenerEndpointRegistrar(bean, ele)));
-            logger.info("Registered @CanalListener methods processed on bean:{} , Methods :{} ", bean.getClass().getName(),
+            logger.info("Registered @CanalListener methods processed on bean:{} , Methods :{} ", beanName,
                     annotatedMethods.keySet().stream().map(e -> e.getName()).collect(Collectors.toSet()));
         }
         return bean;
