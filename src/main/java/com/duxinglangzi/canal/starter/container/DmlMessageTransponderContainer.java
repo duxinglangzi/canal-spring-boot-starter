@@ -48,6 +48,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                                 "thread interrupt , current connector host: {} , port: {} ",
                         endpointInstance.getHost(), endpointInstance.getPort());
                 Thread.currentThread().interrupt();
+                connector.disconnect();
             } else {
                 sleep(endpointInstance.getAcquireInterval());
             }
