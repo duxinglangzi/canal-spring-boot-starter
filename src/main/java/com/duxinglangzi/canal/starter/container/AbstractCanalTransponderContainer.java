@@ -47,6 +47,7 @@ public abstract class AbstractCanalTransponderContainer implements SmartLifecycl
     public void stop(Runnable callback) {
         callback.run();
         setRunning(false);
+        sleep(SLEEP_TIME_MILLI_SECONDS);
     }
 
     @Override
