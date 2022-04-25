@@ -84,7 +84,7 @@ public class CanalListenerTest {
 
     public void printChange(String method,CanalEntry.EventType eventType, CanalEntry.RowData rowData) {
         if (eventType == CanalEntry.EventType.DELETE) {
-            rowData.getAfterColumnsList().stream().collect(Collectors.toList()).forEach(ele -> {
+            rowData.getBeforeColumnsList().stream().collect(Collectors.toList()).forEach(ele -> {
                 System.out.println("[方法: "+method+" ,  delete 语句 ] --->> 字段名: " + ele.getName() + ", 删除的值为: " + ele.getValue());
             });
         }
