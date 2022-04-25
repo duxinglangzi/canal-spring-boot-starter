@@ -22,6 +22,7 @@ public abstract class AbstractCanalTransponderContainer implements SmartLifecycl
 
     protected abstract void doStart();
     protected abstract void initConnect();
+    protected abstract void disconnect();
 
 
     @Override
@@ -32,6 +33,7 @@ public abstract class AbstractCanalTransponderContainer implements SmartLifecycl
                 sleep(5L * SLEEP_TIME_MILLI_SECONDS);
             initConnect();
             while (isRunning() && !Thread.currentThread().isInterrupted()) doStart();
+            disconnect(); // 线程被终止或者容器已经停止
         }).start();
         setRunning(true);
     }

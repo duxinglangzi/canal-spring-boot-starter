@@ -35,6 +35,11 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
 
     }
 
+    public void disconnect(){
+        // 关闭连接
+        connector.disconnect();
+    }
+
 
     public void doStart() {
         Message message = null;
@@ -48,7 +53,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                                 "thread interrupt , current connector host: {} , port: {} ",
                         endpointInstance.getHost(), endpointInstance.getPort());
                 Thread.currentThread().interrupt();
-                connector.disconnect();
+                disconnect();
             } else {
                 sleep(endpointInstance.getAcquireInterval());
             }
