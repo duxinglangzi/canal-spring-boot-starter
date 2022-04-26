@@ -64,13 +64,15 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
             sleep(endpointInstance.getAcquireInterval());
             return;
         }
-        try {
-            entries.forEach(e -> consumer(e));
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("[MessageTransponderContainer_doStart] CanalEntry.Entry consumer error ", e);
-            // connector.rollback(message.getId()); // 目前先不处理失败, 无需回滚数据
-            // return;
+        for (CanalEntry.Entry entry : entries) {
+            try {
+                consumer(entry);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("[MessageTransponderContainer_doStart] CanalEntry.Entry consumer error ", e);
+                // connector.rollback(message.getId()); // 目前先不处理失败, 无需回滚数据
+                // return;
+            }
         }
         connector.ack(message.getId()); // 提交确认
     }
