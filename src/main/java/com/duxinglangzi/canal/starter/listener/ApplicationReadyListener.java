@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author wuqiong 2022/4/16
  */
-public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent>{
+public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent> {
 
     public static final AtomicBoolean START_LISTENER_CONTAINER = new AtomicBoolean(false);
 

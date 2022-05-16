@@ -17,6 +17,7 @@ public class CanalConnectorFactory {
 
     /**
      * 创建 CanalConnector
+     *
      * @param destination
      * @param endpointInstance
      * @return CanalConnector

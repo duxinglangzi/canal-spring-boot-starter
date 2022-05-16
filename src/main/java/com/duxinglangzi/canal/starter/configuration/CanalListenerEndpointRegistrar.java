@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * 登记员
+ *
  * @author wuqiong 2022/4/11
  */
 public class CanalListenerEndpointRegistrar {
@@ -26,6 +27,7 @@ public class CanalListenerEndpointRegistrar {
      * 1、目前实现的 DML 解析器仅支持两个参数 <p>
      * 2、且顺序必须为: CanalEntry.EventType 、 CanalEntry.RowData  <p>
      * 3、如果CanalListener 指定的 destination 不在配置文件内，则直接抛错 <p>
+     *
      * @param sets
      * @return void
      * @author wuqiong 2022-04-23 20:27
@@ -55,6 +57,7 @@ public class CanalListenerEndpointRegistrar {
 
     /**
      * 过滤参数
+     *
      * @param database
      * @param tableName
      * @param eventType

@@ -13,6 +13,7 @@ import java.util.*;
 
 /**
  * DML 数据拉取、解析
+ *
  * @author wuqiong 2022/4/11
  */
 public class DmlMessageTransponderContainer extends AbstractCanalTransponderContainer {
@@ -40,7 +41,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
 
     }
 
-    public void disconnect(){
+    public void disconnect() {
         // 关闭连接
         connector.disconnect();
     }

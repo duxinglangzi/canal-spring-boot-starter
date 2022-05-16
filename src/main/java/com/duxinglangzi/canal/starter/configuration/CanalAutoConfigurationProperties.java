@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * Canal连接的配置类
+ *
  * @author wuqiong 2022/4/11
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -60,20 +61,19 @@ public class CanalAutoConfigurationProperties {
         private int retryCount = 5;
 
         /**
-         *
          * mysql 数据解析关注的表，Perl正则表达式.
          * <p>
-         *
+         * <p>
          * 多个正则之间以逗号(,)分隔，转义符需要双斜杠(\\)
          * <p>
-         *
+         * <p>
          * 常见例子： <p>
          * 1.  所有库表：.*   or  .*\\..* <p>
          * 2.  canal_db 下所有表：    canal_db\\..* <p>
          * 3.  canal_db 下的以canal打头的表：   canal_db\\.canal.* <p>
          * 4.  canal_db 下的一张表：  canal_db\\.test1 <p>
          * 5.  多个规则组合使用：canal_db\\..*,mysql_db.test1,mysql.test2 (逗号分隔) <p>
-         *
+         * <p>
          * 默认: 全库全表(.*\\..*)
          */
         private String subscribe = ".*\\..*";

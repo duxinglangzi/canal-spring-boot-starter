@@ -15,6 +15,7 @@ public class CanalBootstrapConfiguration implements ImportBeanDefinitionRegistra
 
     /**
      * 注册 CanalListenerAnnotationBeanPostProcessor 到spring bean 容器内
+     *
      * @param importingClassMetadata
      * @param registry
      * @return void

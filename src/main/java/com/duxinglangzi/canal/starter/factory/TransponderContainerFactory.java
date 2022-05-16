@@ -22,6 +22,7 @@ public class TransponderContainerFactory {
 
     /**
      * 将所有待注册的端点，注册到spring中
+     *
      * @param beanFactory
      * @param canalConfig
      * @param registrars
