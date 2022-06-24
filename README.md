@@ -41,6 +41,16 @@ public class CanalListenerTest {
      * 目前 Listener 方法的参数必须为 CanalEntry.EventType , CanalEntry.RowData 
      * 程序在启动过程中会做检查
      */
+    
+    /**
+     * 监控更新操作
+     * 支持动态参数配置，配置项需在 yml 或 properties 进行配置
+     * 目标是 ${prod.example} 的  ${prod.database} 库  users表
+     */
+    @CanalUpdateListener(destination = "${prod.example}", database = "${prod.database}", table = {"users"})
+    public void listenerExampleBooksUsers(CanalEntry.EventType eventType, CanalEntry.RowData rowData) {
+        printChange("listenerExampleBooksUsers",eventType, rowData);
+    }
 
     /**
      * 监控更新操作 ，目标是 example的  books库  users表

@@ -2,13 +2,11 @@ package com.duxinglangzi.canal.starter.configuration;
 
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.exception.CanalClientException;
-import com.duxinglangzi.canal.starter.annotation.CanalListener;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,7 +19,27 @@ import java.util.stream.Collectors;
 public class CanalListenerEndpointRegistrar {
 
     private Object bean;
-    private Map.Entry<Method, CanalListener> listenerEntry;
+    private Method method;
+
+    /**
+     * 如果未进行配置，则使用配置文件里全部 destination
+     */
+    private String destination;
+
+    /**
+     * 数据库名
+     */
+    private String database;
+
+    /**
+     * 数据表名
+     */
+    private String[] table;
+
+    /**
+     * 数据变动类型，此处请注意，默认不包含 DDL
+     */
+    private CanalEntry.EventType[] eventType;
 
     /**
      * 1、目前实现的 DML 解析器仅支持两个参数 <p>
@@ -39,20 +57,19 @@ public class CanalListenerEndpointRegistrar {
                 || classes.get(0) != CanalEntry.EventType.class)
             throw new IllegalArgumentException("@CanalListener Method Parameter Type Invalid, " +
                     "Need Parameter Type [CanalEntry.EventType,CanalEntry.RowData] please check ");
-        if (StringUtils.isNotBlank(getListenerEntry().getValue().destination())
-                && !sets.contains(getListenerEntry().getValue().destination()))
+        if (StringUtils.isNotBlank(getDestination()) && !sets.contains(getDestination()))
             throw new CanalClientException("@CanalListener Illegal destination , please check ");
 
     }
 
 
     public List<Class<?>> parameterTypes() {
-        return Arrays.stream(getListenerEntry().getKey().getParameterTypes()).collect(Collectors.toList());
+        return Arrays.stream(getMethod().getParameterTypes()).collect(Collectors.toList());
     }
 
     public boolean isContainDestination(String destination) {
-        if (StringUtils.isBlank(getListenerEntry().getValue().destination())) return true;
-        return getListenerEntry().getValue().destination().equals(destination);
+        if (StringUtils.isBlank(getDestination())) return true;
+        return getDestination().equals(destination);
     }
 
     /**
@@ -66,27 +83,49 @@ public class CanalListenerEndpointRegistrar {
      */
     public static Predicate<CanalListenerEndpointRegistrar> filterArgs(
             String database, String tableName, CanalEntry.EventType eventType) {
-        Predicate<CanalListenerEndpointRegistrar> databases = e -> StringUtils.isBlank(e.getListenerEntry().getValue().database())
-                || e.getListenerEntry().getValue().database().equals(database);
-        Predicate<CanalListenerEndpointRegistrar> table = e -> e.getListenerEntry().getValue().table().length == 0
-                || (e.getListenerEntry().getValue().table().length == 1 && "".equals(e.getListenerEntry().getValue().table()[0]))
-                || Arrays.stream(e.getListenerEntry().getValue().table()).anyMatch(s -> s.equals(tableName));
-        Predicate<CanalListenerEndpointRegistrar> eventTypes = e -> e.getListenerEntry().getValue().eventType().length == 0
-                || Arrays.stream(e.getListenerEntry().getValue().eventType()).anyMatch(eve -> eve == eventType);
+        Predicate<CanalListenerEndpointRegistrar> databases =
+                e -> StringUtils.isBlank(e.getDatabase()) || e.getDatabase().equals(database);
+        Predicate<CanalListenerEndpointRegistrar> table = e -> e.getTable().length == 0
+                || (e.getTable().length == 1 && "".equals(e.getTable()[0]))
+                || Arrays.stream(e.getTable()).anyMatch(s -> s.equals(tableName));
+        Predicate<CanalListenerEndpointRegistrar> eventTypes = e -> e.getEventType().length == 0
+                || Arrays.stream(e.getEventType()).anyMatch(eve -> eve == eventType);
         return databases.and(table).and(eventTypes);
     }
 
 
-    public CanalListenerEndpointRegistrar(Object bean, Map.Entry<Method, CanalListener> entry) {
+    public CanalListenerEndpointRegistrar(
+            Object bean, Method method, String destination,
+            String database, String[] tables, CanalEntry.EventType[] eventTypes) {
         this.bean = bean;
-        this.listenerEntry = entry;
-    }
-
-    public Map.Entry<Method, CanalListener> getListenerEntry() {
-        return listenerEntry;
+        this.method = method;
+        this.destination = destination;
+        this.database = database;
+        this.table = tables;
+        this.eventType = eventTypes;
     }
 
     public Object getBean() {
         return bean;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String[] getTable() {
+        return table;
+    }
+
+    public CanalEntry.EventType[] getEventType() {
+        return eventType;
     }
 }

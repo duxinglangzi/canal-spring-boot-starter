@@ -29,8 +29,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
     public void initConnect() {
         try {
             // init supportAllTypes
-            registrars.forEach(e -> SUPPORT_ALL_TYPES.addAll(
-                    Arrays.asList(e.getListenerEntry().getValue().eventType())));
+            registrars.forEach(e -> SUPPORT_ALL_TYPES.addAll(Arrays.asList(e.getEventType())));
             connector.connect();
             connector.subscribe(endpointInstance.getSubscribe());
             connector.rollback();
@@ -114,7 +113,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                             eventType))
                     .forEach(element -> {
                         try {
-                            element.getListenerEntry().getKey().invoke(element.getBean(), eventType, rowData);
+                            element.getMethod().invoke(element.getBean(), eventType, rowData);
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             logger.error("[DmlMessageTransponderContainer_consumer] RowData Callback Method invoke error message", e);
                             throw new RuntimeException("RowData Callback Method invoke error message： " + e.getMessage(), e);

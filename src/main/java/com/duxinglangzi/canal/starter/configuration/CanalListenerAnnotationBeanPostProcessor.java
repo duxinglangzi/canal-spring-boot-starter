@@ -11,6 +11,8 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
  * @author wuqiong 2022/4/11
  */
 public class CanalListenerAnnotationBeanPostProcessor implements
-        BeanPostProcessor, SmartInitializingSingleton, BeanFactoryPostProcessor {
+        BeanPostProcessor, SmartInitializingSingleton, BeanFactoryPostProcessor, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(CanalListenerAnnotationBeanPostProcessor.class);
 
@@ -33,6 +35,7 @@ public class CanalListenerAnnotationBeanPostProcessor implements
     private Set<CanalListenerEndpointRegistrar> registrars = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private ConfigurableListableBeanFactory configurableListableBeanFactory;
     private CanalAutoConfigurationProperties canalAutoConfigurationProperties;
+    private ApplicationContext applicationContext;
 
     @Override
     public Object postProcessAfterInitialization(final Object bean, final String beanName) throws BeansException {
@@ -47,7 +50,7 @@ public class CanalListenerAnnotationBeanPostProcessor implements
             // 先加入到待注册里面
             annotatedMethods.entrySet().stream()
                     .filter(e -> e != null)
-                    .forEach(ele -> registrars.add(new CanalListenerEndpointRegistrar(bean, ele)));
+                    .forEach(ele -> registrars.add(createRegistrar(bean, ele)));
             logger.info("Registered @CanalListener methods processed on bean:{} , Methods :{} ", beanName,
                     annotatedMethods.keySet().stream().map(e -> e.getName()).collect(Collectors.toSet()));
         }
@@ -71,5 +74,15 @@ public class CanalListenerAnnotationBeanPostProcessor implements
         this.configurableListableBeanFactory = configurableListableBeanFactory;
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
+    private CanalListenerEndpointRegistrar createRegistrar(Object bean, Map.Entry<Method, CanalListener> entry) {
+        return new CanalListenerEndpointRegistrar(bean, entry.getKey(),
+                applicationContext.getEnvironment().resolvePlaceholders(entry.getValue().destination()),
+                applicationContext.getEnvironment().resolvePlaceholders(entry.getValue().database()),
+                entry.getValue().table(), entry.getValue().eventType());
+    }
 }
