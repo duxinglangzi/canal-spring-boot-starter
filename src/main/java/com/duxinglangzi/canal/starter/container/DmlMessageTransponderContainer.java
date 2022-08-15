@@ -5,6 +5,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
 import com.duxinglangzi.canal.starter.configuration.CanalAutoConfigurationProperties;
 import com.duxinglangzi.canal.starter.configuration.CanalListenerEndpointRegistrar;
+import com.duxinglangzi.canal.starter.mode.CanalMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +120,7 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                             eventType))
                     .forEach(element -> {
                         try {
-                            element.getMethod().invoke(element.getBean(), eventType, rowData);
+                            element.getMethod().invoke(element.getBean(), new CanalMessage(entry.getHeader(), eventType, rowData));
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             logger.error("[DmlMessageTransponderContainer_consumer] RowData Callback Method invoke error message", e);
                             throw new RuntimeException("RowData Callback Method invoke error message： " + e.getMessage(), e);

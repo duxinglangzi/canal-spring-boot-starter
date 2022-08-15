@@ -2,6 +2,7 @@ package com.duxinglangzi.canal.starter.configuration;
 
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.exception.CanalClientException;
+import com.duxinglangzi.canal.starter.mode.CanalMessage;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
@@ -12,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 登记员
+ * 监听的终端注册器
  *
  * @author wuqiong 2022/4/11
  */
@@ -42,8 +43,8 @@ public class CanalListenerEndpointRegistrar {
     private CanalEntry.EventType[] eventType;
 
     /**
-     * 1、目前实现的 DML 解析器仅支持两个参数 <p>
-     * 2、且顺序必须为: CanalEntry.EventType 、 CanalEntry.RowData  <p>
+     * 1、目前实现的 DML 解析器仅支持1个参数, 该参数对象内包含了: 库名、表名、事件类型、变更的数据 <p>
+     * 2、方法参数必须为: CanalMessage  <p>
      * 3、如果CanalListener 指定的 destination 不在配置文件内，则直接抛错 <p>
      *
      * @param sets
@@ -52,11 +53,9 @@ public class CanalListenerEndpointRegistrar {
      */
     public void checkParameter(Set<String> sets) {
         List<Class<?>> classes = parameterTypes();
-        if (classes.size() > 2
-                || classes.get(1) != CanalEntry.RowData.class
-                || classes.get(0) != CanalEntry.EventType.class)
+        if (classes.size() != 1 || classes.get(0) != CanalMessage.class)
             throw new IllegalArgumentException("@CanalListener Method Parameter Type Invalid, " +
-                    "Need Parameter Type [CanalEntry.EventType,CanalEntry.RowData] please check ");
+                    "Need Parameter Type [ com.duxinglangzi.canal.starter.mode.CanalMessage ] please check ");
         if (StringUtils.isNotBlank(getDestination()) && !sets.contains(getDestination()))
             throw new CanalClientException("@CanalListener Illegal destination , please check ");
 
