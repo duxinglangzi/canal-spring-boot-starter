@@ -6,22 +6,12 @@ import java.io.Serializable;
 
 /**
  * 监听事件的 返回信息, 主要将 CanalEntry 里不同层级的常用数据组装到同一层级使用.<p>
- * headers 是为了方便获取其他数据，比如
+ * entryHeader 是为了方便获取其他数据，比如: 获取日志文件名、日志文件偏移量等
  *
  * @author wuqiong 2022/8/15
  */
 public class CanalMessage implements Serializable {
     private static final long serialVersionUID = 730485362580815032L;
-
-    /**
-     * 数据库名
-     */
-    private String dataBaseName;
-
-    /**
-     * 表名
-     */
-    private String tableName;
 
     /**
      * 发生变化的 事件类型
@@ -50,16 +40,20 @@ public class CanalMessage implements Serializable {
         this.entryHeader = entryHeader;
         this.eventType = eventType;
         this.rowData = rowData;
-        this.dataBaseName = getEntryHeader().getSchemaName();
-        this.tableName = getEntryHeader().getTableName();
     }
 
+    /**
+     * 数据库名
+     */
     public String getDataBaseName() {
-        return dataBaseName;
+        return getEntryHeader().getSchemaName();
     }
 
+    /**
+     * 表名
+     */
     public String getTableName() {
-        return tableName;
+        return getEntryHeader().getTableName();
     }
 
     public CanalEntry.EventType getEventType() {

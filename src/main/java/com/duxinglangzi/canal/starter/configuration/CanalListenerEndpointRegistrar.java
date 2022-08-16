@@ -57,7 +57,7 @@ public class CanalListenerEndpointRegistrar {
             throw new IllegalArgumentException("@CanalListener Method Parameter Type Invalid, " +
                     "Need Parameter Type [ com.duxinglangzi.canal.starter.mode.CanalMessage ] please check ");
         if (StringUtils.isNotBlank(getDestination()) && !sets.contains(getDestination()))
-            throw new CanalClientException("@CanalListener Illegal destination , please check ");
+            throw new CanalClientException("@CanalListener Illegal destination  " + getDestination() + ", please check ");
 
     }
 
