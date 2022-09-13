@@ -112,4 +112,34 @@
     </build>
 
 
+
+    <!-- 添加 maven 仓库指定, 烦请使用时手动修改 xxxxxx 部分的内容 -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://nexus.xxxxxx.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name></name>
+            <url>https://nexus.xxxxxx.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>https://nexus.xxxxxx.com/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
 </project>
