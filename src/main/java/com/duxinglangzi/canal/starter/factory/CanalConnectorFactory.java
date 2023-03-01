@@ -29,17 +29,9 @@ public class CanalConnectorFactory {
         Assert.isTrue(endpointInstance != null, "endpoint instance is null , please check ");
         CanalConnector connector;
         if (endpointInstance.isClusterEnabled()) {
-            if (!StringUtils.hasText(endpointInstance.getZookeeperAddress()))
-                throw new CanalClientException("zookeeper address is null");
-            List<SocketAddress> addresses = new ArrayList<>();
-            for (String s : endpointInstance.getZookeeperAddress().split(",")) {
-                String[] split = s.split(":");
-                if (split.length != 2)
-                    throw new CanalClientException("error parsing zookeeper address:" + s);
-                addresses.add(new InetSocketAddress(split[0], Integer.parseInt(split[1])));
-            }
+            checkZookeeperAddress(endpointInstance.getZookeeperAddress());
             connector = CanalConnectors.newClusterConnector(
-                    addresses, destination, endpointInstance.getUserName(), endpointInstance.getPassword());
+                    endpointInstance.getZookeeperAddress(), destination, endpointInstance.getUserName(), endpointInstance.getPassword());
         } else {
             connector = CanalConnectors.newSingleConnector(
                     new InetSocketAddress(endpointInstance.getHost(), endpointInstance.getPort()),
@@ -47,4 +39,16 @@ public class CanalConnectorFactory {
         }
         return connector;
     }
+
+    private static void checkZookeeperAddress(String address) {
+        if (!StringUtils.hasText(address)) {
+            throw new CanalClientException("zookeeper address is null");
+        }
+        for (String s : address.split(",")) {
+            if (s.split(":").length != 2) {
+                throw new CanalClientException("error parsing zookeeper address: " + s);
+            }
+        }
+    }
+
 }
