@@ -1,5 +1,8 @@
 # Canal Spring Boot Starter 使用实例
 
+### docker 环境部署文件请查看docker文件夹
+
+
 ### 在spring boot 项目配置文件 application.yml内增加以下内容
 ```yaml
 spring:
@@ -15,7 +18,7 @@ spring:
         cluster-enabled: false  # 是否开启集群
         zookeeper-address:      # zookeeper 地址(开启集群的情况下生效), 例: 192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181
         acquire-interval: 1000  # 未拉取到消息情况下,获取消息的时间间隔毫秒值
-        subscribe: .*\\..*      # 默认情况下拉取所有库、所有表
+        subscribe: .*           # 默认情况下拉取所有库、所有表
 prod:
   example: example
   database: books

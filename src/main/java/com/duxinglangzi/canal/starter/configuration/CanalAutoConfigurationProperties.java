@@ -76,7 +76,7 @@ public class CanalAutoConfigurationProperties {
          * <p>
          * 默认: 全库全表(.*\\..*)
          */
-        private String subscribe = ".*\\..*";
+        private String subscribe = ".*";
 
         /**
          * 未拉取到消息情况下,获取消息的时间间隔毫秒值 , 默认: 1000
