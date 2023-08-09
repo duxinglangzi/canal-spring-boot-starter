@@ -83,6 +83,11 @@ public class CanalAutoConfigurationProperties {
          */
         private long acquireInterval = 1000;
 
+        /**
+         * 当canal连接中断时对外发送通知,通知地址和内容自定义
+         */
+        private String connectionInterruptionNotificationURL = "";
+
         public EndpointInstance() {
         }
 
@@ -164,6 +169,14 @@ public class CanalAutoConfigurationProperties {
 
         public void setSubscribe(String subscribe) {
             this.subscribe = subscribe;
+        }
+
+        public String getConnectionInterruptionNotificationURL() {
+            return connectionInterruptionNotificationURL;
+        }
+
+        public void setConnectionInterruptionNotificationURL(String connectionInterruptionNotificationURL) {
+            this.connectionInterruptionNotificationURL = connectionInterruptionNotificationURL;
         }
     }
 

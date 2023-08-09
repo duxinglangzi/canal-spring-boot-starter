@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -60,12 +62,14 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                 if (local_retry_count > 0) {
                     // 重试次数减一
                     local_retry_count = local_retry_count - 1;
-                    sleep(endpointInstance.getAcquireInterval());
+                    sleep(5L * endpointInstance.getAcquireInterval());
                 } else {
                     // 重试次数 <= 0 时,直接终止线程
                     logger.error("[DmlMessageTransponderContainer] retry count is zero ,  " +
                                     "thread interrupt , current connector host: {} , port: {} ",
                             endpointInstance.getHost(), endpointInstance.getPort());
+                    // 连接中断时,发送通知
+                    sendNotification(endpointInstance.getConnectionInterruptionNotificationURL());
                     Thread.currentThread().interrupt();
                 }
                 return;
@@ -133,6 +137,19 @@ public class DmlMessageTransponderContainer extends AbstractCanalTransponderCont
                             throw new RuntimeException("RowData Callback Method invoke error message： " + e.getMessage(), e);
                         }
                     });
+        }
+    }
+
+    private void sendNotification(String notifyUrl) {
+        if (notifyUrl == null || notifyUrl.isEmpty()) return;
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(notifyUrl).openConnection();
+            //设置请求类型
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+            logger.info("[MessageTransponderContainer_consumer] connection interruption notification URL response code : " + responseCode);
+        } catch (Exception e) {
+            logger.error("[MessageTransponderContainer_consumer] connection interruption notification error message", e);
         }
     }
 
