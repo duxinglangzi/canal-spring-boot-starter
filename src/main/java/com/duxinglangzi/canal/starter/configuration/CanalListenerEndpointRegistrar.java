@@ -3,7 +3,7 @@ package com.duxinglangzi.canal.starter.configuration;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.exception.CanalClientException;
 import com.duxinglangzi.canal.starter.mode.CanalMessage;
-import org.apache.commons.lang3.StringUtils;
+import com.duxinglangzi.canal.starter.utils.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

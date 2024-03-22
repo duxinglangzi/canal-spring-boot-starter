@@ -58,3 +58,5 @@ local.properties
 .mvn/
 mvnw
 mvnw.cmd
+
+.DS_Store

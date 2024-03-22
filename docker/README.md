@@ -8,7 +8,7 @@
 version: "3.7"
 services:
   canal-server:
-    image: canal/canal-server:v1.1.5
+    image: canal/canal-server:v1.1.7
     container_name: canal-server
     ports:
       - "11111:11111"
